@@ -15,6 +15,6 @@ else
 .PHONY: xgen
 xgen:
 	@"$(XGEN)" -i ./data -o ./xml -p main  -l Go
-	@mv "$$(find xml -type f -name '*.go' | head -n 1)" ./pom.go
+	@sed 's/package schema/package main/'  "$$(find xml -type f -name '*.go' | head -n 1)" > ./pom.go
 endif
 
