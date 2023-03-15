@@ -19,3 +19,7 @@ xgen:
 	@rm -rf xml/
 endif
 
+.PHONY: test
+test:
+	@go test "$$(echo "$(TEST_LOG)"| sed 's/test//')"
+
