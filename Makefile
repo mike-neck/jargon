@@ -19,7 +19,11 @@ xgen:
 	@rm -rf xml/
 endif
 
+.PHONY: gen-test
+gen-test:
+	@test/generate-properties-test.sh
+
 .PHONY: test
-test:
+test: gen-test
 	@go test "$$(echo "$(TEST_LOG)"| sed 's/test//')"
 
