@@ -40,9 +40,27 @@ function fileOpen() {
 	if err != nil {
 		t.Fatalf("ReadPom: %v", err)
 	}
+EOF
+}
+
+function checkProjectProperties() {
+  cat << EOF
 	properties := project.Properties
-	if properties == nil {
+	if properties == nil && 0 < len(expected) {
 		t.Fatal("project.Properties")
+		return
+	}
+	if properties == nil && len(expected) == 0 {
+		return
+	}
+	if len(expected) == 0 {
+		propSize := len(properties.Property)
+		if 0 < propSize {
+			t.Errorf("expected empty properties, but got %d", propSize)
+			return
+		} else {
+			return
+		}
 	}
 EOF
 }
@@ -60,13 +78,6 @@ function getProperties() {
 
 function checkValues() {
   cat<<EOF
-	if len(expected) == 0 {
-		propSize := len(properties.Property)
-		if 0 < propSize {
-			t.Errorf("expected empty properties, but got %d", propSize)
-			return
-		}
-	}
 	for name, value := range expected {
 		if properties.Get(name) != value {
 			t.Errorf("expected %s for name %s, but got %s", value, name, properties.Get(name))
@@ -85,6 +96,7 @@ function createTestFunction() {
   echo -e "\texpected := map[string]string{"
   getProperties "${pomFile}" 1
   echo -e "\t}"
+  checkProjectProperties
   checkValues
   echo "}"
 }
