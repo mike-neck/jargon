@@ -15,7 +15,7 @@ declare props=false
 declare line
 declare text
 declare count=0
-while read line; do
+while  read -r line; do
   [[ "${line}" =~ ^\<\!\-\- ]] && continue
   if [[ "${line}" == "<properties>" ]]; then
     props=true
