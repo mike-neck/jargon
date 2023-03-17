@@ -19,10 +19,11 @@ EOF
 
 function capitalize() {
   local pomFile="${1}"
-  local version="$(echo "${pomFile}"| sed -nE 's/.*-([^-]+\.?){1,3}\.pom/\1/p')"
+  local version
+  version="$(echo "${pomFile}"| sed -nE 's/.*-([^-]+\.?){1,3}\.pom/\1/p')"
   local artifact="${pomFile%%-"${version}"*}"
-  for part in $(echo "${artifact//-/ }"); do
-    printf "$(echo "${part:0:1}"| tr 'a-z' 'A-Z')${part:1}"
+  for part in ${artifact//-/ }; do
+    printf "%s%s" "$(echo "${part:0:1}"| tr '[:lower:]' '[:upper:]')" "${part:1}"
   done
 }
 
@@ -76,7 +77,8 @@ EOF
 
 function createTestFunction() {
   local pomFile="${1}"
-  local testName="TestProperties_UnmarshalXML_$(capitalize "$(basename "${pomFile}")")"
+  local testName
+  testName="TestProperties_UnmarshalXML_$(capitalize "$(basename "${pomFile}")")"
   echo ""
   echo "func ${testName}(t *testing.T) {"
   fileOpen "${pomFile}"
