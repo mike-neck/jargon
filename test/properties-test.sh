@@ -19,7 +19,7 @@ while read line; do
   [[ "${line}" =~ ^\<\!\-\- ]] && continue
   if [[ "${line}" == "<properties>" ]]; then
     props=true
-    (( count++ ))
+    (( count++ )) || true
   elif [[ "${line}" == "</properties>" ]]; then
     props=false
   elif [[ "${props}" == "true" ]] && [[ -n "${line}" ]]; then
